@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"xiaomiginshop/controllers/itying"
+	"xiaomiginshop/controllers/shop"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,11 +9,11 @@ import (
 func DefaultRoutersInit(r *gin.Engine) {
 	defaultRouters := r.Group("/")
 	{
-		defaultRouters.GET("/", itying.DefaultController{}.Index)
-		defaultRouters.GET("/thumbnail1", itying.DefaultController{}.Thumbnail1)
-		defaultRouters.GET("/thumbnail2", itying.DefaultController{}.Thumbnail2)
-		defaultRouters.GET("/qrcode1", itying.DefaultController{}.Qrcode1)
-		defaultRouters.GET("/qrcode2", itying.DefaultController{}.Qrcode2)
+		defaultRouters.GET("/", shop.DefaultController{}.Index)
+		//defaultRouters.GET("/thumbnail1", shop.DefaultController{}.Thumbnail1)
+		//defaultRouters.GET("/thumbnail2", shop.DefaultController{}.Thumbnail2)
+		//defaultRouters.GET("/qrcode1", shop.DefaultController{}.Qrcode1)
+		//defaultRouters.GET("/qrcode2", shop.DefaultController{}.Qrcode2)
 
 	}
 }

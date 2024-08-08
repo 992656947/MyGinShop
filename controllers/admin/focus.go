@@ -104,7 +104,7 @@ func (con FocusController) DoEdit(c *gin.Context) {
 	if err5 != nil {
 		con.Error(c, "修改数据失败请重新尝试", "/admin/focus/edit?id="+models.String(id))
 	} else {
-		con.Success(c, "增加轮播图成功", "/admin/focus")
+		con.Success(c, "修改轮播图成功", "/admin/focus")
 	}
 }
 

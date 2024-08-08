@@ -4,14 +4,13 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"html/template"
 	"io"
 	"os"
 	"path"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 // 时间戳转换成日期
@@ -94,7 +93,7 @@ func String(n int) string {
 //}
 //
 
-////Oss上传
+// Oss上传
 //func OssUplod(file *multipart.FileHeader, dst string) (string, error) {
 //
 //	f, err := file.Open()
@@ -201,4 +200,8 @@ func UploadImg(c *gin.Context, picName string) (string, error) {
 	c.SaveUploadedFile(file, dst)
 	return dst, nil
 
+}
+
+func Sub(a int, b int) int {
+	return a - b
 }
