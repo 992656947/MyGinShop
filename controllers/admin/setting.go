@@ -24,7 +24,7 @@ func (con SettingController) DoEdit(c *gin.Context) {
 	models.DB.Find(&setting)
 	err := c.ShouldBind(&setting)
 	if err != nil {
-		con.Error(c, "修改数据成功", "/admin/setting")
+		con.Error(c, "修改数据失败", "/admin/setting")
 		return
 	} else {
 		//上传图片
@@ -36,11 +36,14 @@ func (con SettingController) DoEdit(c *gin.Context) {
 		if len(noPicture) > 0 && err2 == nil {
 			setting.NoPicture = noPicture
 		}
+		//fmt.Println(siteLogo)
+		//fmt.Println(noPicture)
 		err3 := models.DB.Save(&setting).Error
 		if err3 != nil {
-			con.Error(c, "修改数据成功", "/admin/setting")
+			con.Error(c, "修改数据失败", "/admin/setting")
 			return
 		}
 	}
+	con.Success(c, "修改数据成功", "/admin/setting")
 
 }
