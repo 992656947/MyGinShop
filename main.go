@@ -18,6 +18,7 @@ func main() {
 		"UnixToTime": models.UnixToTime,
 		"Str2Html":   models.Str2Html,
 		"Sub":        models.Sub,
+		"Substr":     models.Substr,
 		//"FormatImg":  models.FormatImg,
 	})
 	//加载模板 放在配置路由前面
