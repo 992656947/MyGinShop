@@ -10,7 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type MainController struct{}
+type MainController struct {
+	BaseController
+}
 
 func (con MainController) Index(c *gin.Context) {
 	//获取userinfo 对应的session
@@ -127,4 +129,9 @@ func (con MainController) ChangeNum(c *gin.Context) {
 		})
 	}
 
+}
+
+func (con MainController) FlushAll(c *gin.Context) {
+	models.CacheDb.FlushAll()
+	con.Success(c, "清除缓存成功", "/admin")
 }

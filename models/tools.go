@@ -5,11 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/gomarkdown/markdown"
 	"html/template"
 	"io"
 	"os"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -228,5 +230,35 @@ func Substr(str string, start int, end int) string {
 	}
 
 	return string(rs[start:end])
+
+}
+
+/*
+
+str就是markdown语法
+
+### 我是一个三级标题
+
+<h3>我是一个三级标题</h3>
+
+
+**我是一个加粗**
+
+<strong>我是一个加粗</strong>
+
+
+*/
+
+func FormatAttr(str string) string {
+
+	tempSlice := strings.Split(str, "\n")
+	fmt.Println(tempSlice)
+	var tempStr string
+	for _, v := range tempSlice {
+		md := []byte(v)
+		output := markdown.ToHTML(md, nil, nil)
+		tempStr += string(output)
+	}
+	return tempStr
 
 }

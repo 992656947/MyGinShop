@@ -19,6 +19,7 @@ func main() {
 		"Str2Html":   models.Str2Html,
 		"Sub":        models.Sub,
 		"Substr":     models.Substr,
+		"FormatAttr": models.FormatAttr,
 		//"FormatImg":  models.FormatImg,
 	})
 	//加载模板 放在配置路由前面
