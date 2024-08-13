@@ -20,6 +20,7 @@ func main() {
 		"Sub":        models.Sub,
 		"Substr":     models.Substr,
 		"FormatAttr": models.FormatAttr,
+		"Mul":        models.Mul,
 		//"FormatImg":  models.FormatImg,
 	})
 	//加载模板 放在配置路由前面

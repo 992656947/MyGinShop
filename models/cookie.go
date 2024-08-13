@@ -1,26 +1,29 @@
 package models
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/gin-gonic/gin"
-	"github.com/goccy/go-json"
 )
 
-type ginCookie struct {
-}
+// 定义结构体  缓存结构体 私有
+type ginCookie struct{}
 
-//写入
-
+// 写入数据的方法
 func (cookie ginCookie) Set(c *gin.Context, key string, value interface{}) {
 	bytes, _ := json.Marshal(value)
-	c.SetCookie(key, string(bytes), 3600, "/", "localhost", false, true)
+	//fmt.Printf("Setting cookie: %s=%s\n", key, string(bytes))
+	c.SetCookie(key, string(bytes), 3600, "/", "127.0.0.1", false, true)
 }
 
-// 获取
+// 获取数据的方法
 func (cookie ginCookie) Get(c *gin.Context, key string, obj interface{}) bool {
-
 	valueStr, err1 := c.Cookie(key)
+	//fmt.Printf("Retrieving cookie: %s, value: %s, error: %v\n", key, valueStr, err1)
 	if err1 == nil && valueStr != "" && valueStr != "[]" {
 		err2 := json.Unmarshal([]byte(valueStr), obj)
+		fmt.Printf("Unmarshal error: %v\n", err2)
 		return err2 == nil
 	}
 	return false

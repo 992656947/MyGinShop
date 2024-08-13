@@ -8,6 +8,7 @@ import (
 	"github.com/gomarkdown/markdown"
 	"html/template"
 	"io"
+	"math/rand"
 	"os"
 	"path"
 	"strconv"
@@ -261,4 +262,17 @@ func FormatAttr(str string) string {
 	}
 	return tempStr
 
+}
+
+func Mul(price float64, num int) float64 {
+	return price * float64(num)
+}
+
+func GetRandomNum() string {
+	var str string
+	for i := 0; i < 4; i++ {
+		current := rand.Intn(10)
+		str += String(current)
+	}
+	return str
 }

@@ -11,6 +11,11 @@ type DefaultController struct {
 
 func (con DefaultController) Index(c *gin.Context) {
 
+	//models.Cookie.Set(c, "username", "李四")
+	//var username string
+	//models.Cookie.Get(c, "username", &username)
+	//fmt.Println(username)
+
 	//2、获取轮播图数据
 	var focusList []models.Focus
 	if hasFocusList := models.CacheDb.Get("focusList", &focusList); !hasFocusList {
