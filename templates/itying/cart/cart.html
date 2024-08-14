@@ -9,11 +9,24 @@
 			this.deleteConfirm();
 			this.initCheckBox();
 			this.isCheckedAll();
+			this.initChekOut();
 		},
 		deleteConfirm:function(){
 			$('.delete').click(function(){
 				var flag=confirm('您确定要删除吗?');
 				return flag;
+			})
+		},
+		initChekOut(){
+			$(function(){
+				$("#checkout").click(function(){
+					var allPrice=parseFloat($("#allPrice").html());
+					if(allPrice==0){
+						alert('购物车没有选中去结算的商品')
+					}else{
+						location.href="/buy/checkout";
+					}
+				})
 			})
 		},
 		initCheckBox(){
@@ -42,9 +55,9 @@
 			var _that=this;
 			$(".cart_list :checkbox").click(function() {
 				_that.isCheckedAll();
+
 				var goods_id=$(this).attr("goods_id")
 				var goods_color=$(this).attr("goods_color")
-
 				$.get('/cart/changeOneCart?goods_id='+goods_id+'&goods_color='+goods_color,function(response){
 					if(response.success){
 						$("#allPrice").html(response.allPrice+"元")
@@ -153,12 +166,12 @@
 					<tr class="cart_list">
 
 							<td>
-									<input type="checkbox" goods_id="{{$value.Id}}" goods_color="{{$value.GoodsColor}}"  {{if eq $value.Checked true}} checked {{end}} />
+									<input type="checkbox"  goods_id="{{$value.Id}}" goods_color="{{$value.GoodsColor}}"  {{if eq $value.Checked true}} checked {{end}} />
 							</td>
 	
 							<td>
 									<div class="col_pic">
-											<img src="{{$value.GoodsImg }}" />
+											<img src="{{$value.GoodsImg}}" />
 									</div>
 									<div  class="col_title">
 										{{$value.Title}} -- {{$value.GoodsColor}} {{$value.GoodsVersion}}										
@@ -172,7 +185,6 @@
 							<td>
 	
 								<div class="cart_number">
-
 										<div class="input_left decCart" goods_id="{{$value.Id}}" goods_color="{{$value.GoodsColor}}">-</div>
 	
 										<div class="input_center">
@@ -184,7 +196,7 @@
 							</td>
 	
 							<td class="totalPrice">
-								{{Mul $value.Price $value.Num}}元
+								{{ Mul $value.Price $value.Num}}元						
 	
 							</td>
 							<td>
@@ -206,13 +218,15 @@
 				</div>
 				<div class="jiesuan fr">
 					<div class="jiesuanjiage fl">合计（不含运费）：<span id="allPrice">{{.allPrice}}元</span></div>
-					<div class="jsanniu fr"><input class="jsan" type="submit" name="jiesuan"  value="去结算"/></div>
+					<div class="jsanniu fr"><input class="jsan" id="checkout" type="submit" name="jiesuan"  value="去结算"/></div>
 					<div class="clear"></div>
 				</div>
 				<div class="clear"></div>
 			</div>
 			
 		</div>
+
+		
 		<!-- footer -->
 		{{ template "itying/public/page_footer.html" .}}
 	</body>
