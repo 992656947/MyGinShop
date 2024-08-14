@@ -1,6 +1,7 @@
 package shop
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -32,7 +33,7 @@ func (con BaseController) Render(c *gin.Context, tpl string, data map[string]int
 	}
 
 	//3、获取中间导航
-	middleNavList := []models.Nav{}
+	var middleNavList []models.Nav
 	if hasMiddleNavList := models.CacheDb.Get("middleNavList", &middleNavList); !hasMiddleNavList {
 		models.DB.Where("status=1 AND position=2").Find(&middleNavList)
 		for i := 0; i < len(middleNavList); i++ {
@@ -45,10 +46,35 @@ func (con BaseController) Render(c *gin.Context, tpl string, data map[string]int
 		models.CacheDb.Set("middleNavList", middleNavList, 60*60)
 	}
 
+	//获取userinfo
+	user := models.User{}
+	isLogin := models.Cookie.Get(c, "userinfo", &user)
+	var userinfo string
+	if isLogin == true && len(user.Phone) == 11 {
+		userinfo = fmt.Sprintf(`<li class="userinfo">
+			<a href="#">%v</a>		
+
+			<i class="i"></i>
+			<ol>
+				<li><a href="#">个人中心</a></li>
+
+				<li><a href="#">喜欢</a></li>
+
+				<li><a href="/pass/loginOut">退出登录</a></li>
+			</ol>								
+		</li> `, user.Phone)
+	} else {
+		userinfo = fmt.Sprintf(`<li><a href="/pass/login" >登录</a></li>
+		<li>|</li>
+		<li><a href="/pass/registerStep1"  >注册</a></li>
+		<li>|</li>`)
+	}
+
 	renderData := gin.H{
 		"topNavList":    topNavList,
 		"goodsCateList": goodsCateList,
 		"middleNavList": middleNavList,
+		"userinfo":      userinfo,
 	}
 
 	for key, v := range data {

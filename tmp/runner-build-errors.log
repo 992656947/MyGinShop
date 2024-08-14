@@ -1,5 +1,0 @@
-# xiaomiginshop/controllers/shop
-controllers\shop\pass.go:103:2: sign declared and not used
-controllers\shop\pass.go:104:2: smsCode declared and not used
-controllers\shop\pass.go:105:2: password declared and not used
-controllers\shop\pass.go:106:2: rpassword declared and not used

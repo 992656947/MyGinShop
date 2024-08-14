@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"regexp"
+	"strings"
 	"xiaomiginshop/models"
 
 	"net/http"
@@ -30,12 +31,56 @@ func (con PassController) Captcha(c *gin.Context) {
 
 func (con PassController) Login(c *gin.Context) {
 	//生成随机数
-
-	a := models.GetRandomNum()
-	// c.HTML(http.StatusOK, "itying/pass/login.html", gin.H{})
-	c.JSON(200, gin.H{
-		"param": a,
+	prevPage := c.Request.Referer()
+	c.HTML(http.StatusOK, "itying/pass/login.html", gin.H{
+		"prevPage": prevPage,
 	})
+}
+
+func (con PassController) DoLogin(c *gin.Context) {
+	phone := c.PostForm("phone")
+	password := c.PostForm("password")
+	captchaId := c.PostForm("captchaId")
+	captchaVal := c.PostForm("captchaVal")
+	//1、验证图形验证码是否合法
+	if flag := models.VerifyCaptcha(captchaId, captchaVal); !flag {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "图形验证码不正确",
+		})
+		return
+	}
+
+	//2、验证用户名密码是否正确
+	password = models.Md5(strings.Trim(password, " "))
+	var userList []models.User
+	models.DB.Where("phone = ? AND password = ?", phone, password).Find(&userList)
+	if len(userList) > 0 {
+		//执行登录
+		models.Cookie.Set(c, "userinfo", userList[0])
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "用户登录成功",
+		})
+
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "用户名或者密码错误",
+		})
+		return
+	}
+}
+
+func (con PassController) LoginOut(c *gin.Context) {
+	//删除cookie里面的userinfo执行跳转
+	models.Cookie.Remove(c, "userinfo")
+	prevPage := c.Request.Referer()
+	if len(prevPage) > 0 {
+		c.Redirect(302, prevPage)
+	} else {
+		c.Redirect(302, "/")
+	}
 }
 
 func (con PassController) RegisterStep1(c *gin.Context) {
@@ -100,19 +145,44 @@ func (con PassController) RegisterStep3(c *gin.Context) {
 func (con PassController) DoRegister(c *gin.Context) {
 
 	//1、获取表单传过来的数据
-	sign, _ := c.FormFile("sign")
-	smsCode, _ := c.FormFile("smsCode")
-	password, _ := c.FormFile("password")
-	rpassword, _ := c.FormFile("rpassword")
+	sign := c.PostForm("sign")
+	smsCode := c.PostForm("smsCode")
+	password := c.PostForm("password")
+	rpassword := c.PostForm("rpassword")
+
 	//2、验证smsCode是否合法
+	session := sessions.Default(c)
+	sessionSmsCode := session.Get("smsCode")
+	sessionSmsCodeStr, ok := sessionSmsCode.(string)
+
+	if !ok || smsCode != sessionSmsCodeStr {
+		c.Redirect(302, "/")
+	}
 
 	//3、验证密码是否合法
+	if len(password) < 6 || password != rpassword {
+		c.Redirect(302, "/")
+	}
 
 	//4、验证签名是否合法
-
-	//4、完成注册
-
-	//5、执行登录
+	var userTemp []models.UserTemp
+	models.DB.Where("sign=?", sign).Find(&userTemp)
+	if len(userTemp) > 0 {
+		//4、完成注册
+		user := models.User{
+			Phone:    userTemp[0].Phone,
+			Password: models.Md5(password), //密码要加密
+			LastIp:   userTemp[0].Ip,
+			AddTime:  int(models.GetUnix()),
+			Status:   1,
+		}
+		models.DB.Create(&user)
+		//5、执行登录
+		models.Cookie.Set(c, "userinfo", user)
+		c.Redirect(302, "/")
+	} else {
+		c.Redirect(302, "/")
+	}
 
 }
 

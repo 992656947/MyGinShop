@@ -42,7 +42,7 @@ func (con ProductController) Category(c *gin.Context) {
 	}
 	tempSlice = append(tempSlice, cateId)
 	where := "cate_id in ?"
-	goodsList := []models.Goods{}
+	var goodsList []models.Goods
 	models.DB.Where(where, tempSlice).Offset((page - 1) * pageSize).Limit(pageSize).Find(&goodsList)
 
 	//获取总数量

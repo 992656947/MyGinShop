@@ -2,6 +2,7 @@ package routers
 
 import (
 	"xiaomiginshop/controllers/shop"
+	"xiaomiginshop/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +31,8 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/cart/delCart", shop.CartController{}.DelCart)
 
 		defaultRouters.GET("/pass/login", shop.PassController{}.Login)
+		defaultRouters.POST("/pass/doLogin", shop.PassController{}.DoLogin)
+		defaultRouters.GET("/pass/loginOut", shop.PassController{}.LoginOut)
 		defaultRouters.GET("/pass/captcha", shop.PassController{}.Captcha)
 
 		defaultRouters.GET("/pass/registerStep1", shop.PassController{}.RegisterStep1)
@@ -38,6 +41,8 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/pass/sendCode", shop.PassController{}.SendCode)
 		defaultRouters.GET("/pass/validateSmsCode", shop.PassController{}.ValidateSmsCode)
 		defaultRouters.POST("/pass/doRegister", shop.PassController{}.DoRegister)
+
+		defaultRouters.GET("/buy/checkout", middlewares.InitUserAuthMiddleware, shop.BuyController{}.Checkout)
 
 	}
 }
