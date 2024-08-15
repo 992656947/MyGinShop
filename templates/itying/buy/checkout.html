@@ -17,6 +17,7 @@
 </div>
 
 <form action="/buy/doCheckout" method="post">
+	<input id="orderSign" name="orderSign" value="{{.orderSign}}" type="hidden" >
 <div class="checkout-box">
 	<div class="section section-address">
 		<div class="section-header clearfix">
@@ -204,6 +205,7 @@
 </div>
 
 </form>
+
 
 <!-- 收货地址增加 -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
