@@ -306,6 +306,7 @@ func (con GoodsController) Edit(c *gin.Context) {
 		"prevPage":       c.Request.Referer(),
 	})
 }
+
 func (con GoodsController) DoEdit(c *gin.Context) {
 
 	//1、获取表单提交过来的数据

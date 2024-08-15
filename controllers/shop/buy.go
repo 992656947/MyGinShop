@@ -5,6 +5,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"net/http"
 	"xiaomiginshop/models"
 )
 
@@ -202,5 +203,49 @@ func (con BuyController) Pay(c *gin.Context) {
 		"order":      order,
 		"allPrice":   allPrice,
 	})
+
+}
+
+func (con BuyController) OrderPayStatus(c *gin.Context) {
+
+	id, err := models.Int(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "传入参数错误",
+		})
+		return
+	}
+	//获取用户信息
+	user := models.User{}
+	models.Cookie.Get(c, "userinfo", &user)
+
+	//获取主订单信息
+	order := models.Order{}
+	models.DB.Where("id=?", id).Find(&order)
+
+	//判断当前数据是否合法
+	if user.Id != order.Uid {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "非法请求",
+		})
+		return
+	}
+
+	//判断是否支付
+	if order.PayStatus == 1 && order.OrderStatus == 1 {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "支付成功",
+		})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "支付成功",
+		})
+		return
+	}
 
 }

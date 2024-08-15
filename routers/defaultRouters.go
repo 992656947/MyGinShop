@@ -45,11 +45,23 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/buy/checkout", middlewares.InitUserAuthMiddleware, shop.BuyController{}.Checkout)
 		defaultRouters.POST("/buy/doCheckout", middlewares.InitUserAuthMiddleware, shop.BuyController{}.DoCheckout)
 		defaultRouters.GET("/buy/pay", middlewares.InitUserAuthMiddleware, shop.BuyController{}.Pay)
+		defaultRouters.GET("/buy/orderPayStatus", middlewares.InitUserAuthMiddleware, shop.BuyController{}.OrderPayStatus)
 
 		defaultRouters.POST("/address/addAddress", middlewares.InitUserAuthMiddleware, shop.AddressController{}.AddAddress)
 		defaultRouters.POST("/address/editAddress", middlewares.InitUserAuthMiddleware, shop.AddressController{}.EditAddress)
 		defaultRouters.GET("/address/changeDefaultAddress", middlewares.InitUserAuthMiddleware, shop.AddressController{}.ChangeDefaultAddress)
 		defaultRouters.GET("/address/getOneAddressList", middlewares.InitUserAuthMiddleware, shop.AddressController{}.GetOneAddressList)
+
+		defaultRouters.GET("/alipay", middlewares.InitUserAuthMiddleware, shop.AlipayController{}.Alipay)
+		defaultRouters.POST("/alipayNotify", shop.AlipayController{}.AlipayNotify)
+		defaultRouters.GET("/alipayReturn", middlewares.InitUserAuthMiddleware, shop.AlipayController{}.AlipayReturn)
+
+		defaultRouters.GET("/wxpay", middlewares.InitUserAuthMiddleware, shop.WxpayController{}.Wxpay)
+		defaultRouters.POST("/wxpay/notify", shop.WxpayController{}.WxpayNotify)
+
+		defaultRouters.GET("/user", middlewares.InitUserAuthMiddleware, shop.UserController{}.Index)
+		defaultRouters.GET("/user/order", middlewares.InitUserAuthMiddleware, shop.UserController{}.OrderList)
+		defaultRouters.GET("/user/orderinfo", middlewares.InitUserAuthMiddleware, shop.UserController{}.OrderInfo)
 
 	}
 }

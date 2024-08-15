@@ -94,5 +94,9 @@ func AdminRoutersInit(r *gin.Engine) {
 		adminRouters.GET("/setting", admin.SettingController{}.Index)
 		adminRouters.POST("/setting/doEdit", admin.SettingController{}.DoEdit)
 
+		adminRouters.GET("/order", admin.OrderController{}.Order)
+		adminRouters.POST("/order/doEdit", admin.OrderController{}.DoEdit)
+		adminRouters.GET("/order/delete", admin.OrderController{}.Delete)
+
 	}
 }

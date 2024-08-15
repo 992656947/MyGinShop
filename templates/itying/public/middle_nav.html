@@ -37,13 +37,13 @@
                                                 {{if eq $v.Link ""}}
 
                                                 <a href="category{{$v.Id}}" class="clearfix">
-                                                    <div class="img fl"><img src="{{$v.CateImg}}"
+                                                    <div class="img fl"><img src="/{{$v.CateImg}}"
                                                             alt="{{$v.Title}}"></div>
                                                     <span class="fl">{{$v.Title}}</span>
                                                 </a>
                                                 {{else}}
                                                 <a href="{{$v.Link}}" class="clearfix">
-                                                    <div class="img fl"><img src="{{$v.CateImg}}"
+                                                    <div class="img fl"><img src="/{{$v.CateImg}}"
                                                             alt="{{$v.Title}}"></div>
                                                     <span class="fl">{{$v.Title}}</span>
                                                 </a>
@@ -72,7 +72,7 @@
                     {{range $k,$v := $value.GoodsItems}}
                     <li>
                         <a href="detail?id={{$v.Id}}">
-                            <img src="{{$v.GoodsImg}}" alt="{{$v.Title}}" />
+                            <img src="/{{$v.GoodsImg}}" alt="{{$v.Title}}" />
                             <p>{{$v.Title}}</p>
                             <p class="price">{{$v.Price}}元</p>
                         </a>

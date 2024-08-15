@@ -4,6 +4,7 @@
 <!--end header -->
 <link rel="stylesheet" href="/static/itying/css/pay.css" />
 <script src="/static/itying/js/bootstrap.js"></script>
+<link rel="stylesheet" href="/static/itying/css/bootstrap.css">
 <!-- start banner_x -->
 <div class="banner_x center clearfix">
 	<a href="/" target="_blank">
@@ -29,7 +30,8 @@
 					</p>
 					<br>
 					<br>
-					<a href="javascript:void(0);" class="show-detail" id="J_showDetail" data-stat-id="db85b2885a2fdc53">订单详情</a>
+					<a href="javascript:void(0);" class="show-detail" id="J_showDetail"
+						data-stat-id="db85b2885a2fdc53">订单详情</a>
 				</div>
 			</div>
 			<i class="iconfont icon-right">√</i>
@@ -50,7 +52,8 @@
 						<div class="label">商品：</div>
 						<div class="content">
 							{{range $key,$value:=.orderItems}}
-								<p>{{$value.ProductTitle}} {{$value.GoodsVersion}} {{$value.GoodsColor}}  数量：{{$value.ProductNum}} 价格：{{$value.ProductPrice}}</p>							
+							<p>{{$value.ProductTitle}} {{$value.GoodsVersion}} {{$value.GoodsColor}}
+								数量：{{$value.ProductNum}} 价格：{{$value.ProductPrice}}</p>
 							{{end}}
 						</div>
 					</li>
@@ -74,12 +77,20 @@
 			</div>
 
 			<div class="payment-box ">
-				
+
 				<div class="payment-body">
 					<ul class="clearfix payment-list J_paymentList J_linksign-customize">
-						<li id="J_weixin" data-stat-id="4971b7cf6ccf0faf" onclick="_msq.push(['trackEvent', 'f1542ececd0b6bc5-4971b7cf6ccf0faf', '', 'pcpid', '']);"><img src="//c1.mifile.cn/f/i/16/pay/weixinpay0701.png" alt="微信支付" style="margin-left: 0;"></li>
-						<li class="J_bank" data-stat-id="4971b7cf6ccf0faf" onclick="_msq.push(['trackEvent', 'f1542ececd0b6bc5-4971b7cf6ccf0faf', '', 'pcpid', '']);"><input type="radio" name="payOnlineBank" id="alipay" value="alipay"> <img src="//s01.mifile.cn/i/banklogo/payOnline_zfb.png?ver2015" alt="支付宝" style="margin-left: 0;"></li>
-						
+						<ul class="clearfix payment-list J_paymentList J_linksign-customize">
+							<li id="weixinPay">
+								<img src="/static/shop/image/weixinpay0701.png" alt="微信支付" />
+							</li>
+							<li id="alipay">
+								<a href="/alipay?id={{.order.Id}}" target="_blank">
+									<img src="/static/shop/image/payOnline_zfb.png" alt="支付宝" /></a>
+							</li>
+	
+						</ul>
+
 					</ul>
 				</div>
 			</div>
@@ -88,13 +99,73 @@
 	</div>
 </div>
 
+<!-- 微信支付 Dialog -->
+<div class="modal fade" id="weixinPayModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">微信支付</h4>
+			</div>
+			<div class="modal-body">
+				<img class="lcode" src="/wxpay?id={{.order.Id}}" />
+				<img class="rphone" src="/static/shop/image/phone.png" />
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 支付宝支付Dialog -->
+
+<div class="modal fade" id="alipayModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">在线支付提醒</h4>
+			</div>
+			<div class="modal-body">
+
+
+				感谢您的支持，支付完成后，页面会自动跳转到订单页面，若需要重新支付请点击“继续支付”按钮，若已完成支付请点击“已完成支付”
+
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-default" data-dismiss="modal">继续支付</button>
+
+					<button type="button" class="btn btn-primary" id="alipayDone">已完成支付</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
 <script>
-	$(function(){
+	$(function () {
 
-			$(".show-detail").click(function(){
+		$(".show-detail").click(function () {
 
-				$(".order-detail").slideToggle();
+			$(".order-detail").slideToggle();
+		})
+		$("#weixinPay").click(function () {
+			$('#weixinPayModel').modal('show');
+		})
+		$("#alipay").click(function () {
+			$('#alipayModel').modal('show');
+		})
+		$("#alipayDone").click(function () {
+			location.href = "/user/order"
+		})
+		
+		setInterval(function () {
+			$.get('/buy/orderPayStatus?id={{.order.Id}}', function (response) {			
+				if (response.success) {
+					location.href = '/user/order'
+				}
 			})
+		}, 3000);
 	})
 </script>
 

@@ -56,7 +56,7 @@ func (con BaseController) Render(c *gin.Context, tpl string, data map[string]int
 
 			<i class="i"></i>
 			<ol>
-				<li><a href="#">个人中心</a></li>
+				<li><a href="/user">个人中心</a></li>
 
 				<li><a href="#">喜欢</a></li>
 

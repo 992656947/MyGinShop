@@ -1,0 +1,83 @@
+{{ define "admin/order/index.html" }}
+{{ template "admin/public/page_header.html" .}}
+<script type="text/javascript" src="/static/admin/js/jqPaginator.js"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form role="form" class="form-inline" method="get" action="/admin/order">
+                    <div class="form-group">
+                        <label for="orderId">订单号</label>
+                        <input type="text" class="form-control" value="{{.keyword}}" id="keyword" name="keyword" placeholder="请输入订单号">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">开始搜索</button>
+                    </div>
+                </form>
+            </div>
+            <!--
+                列表展示
+            -->
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr class="th">
+                        <th>订单号</th>
+                        <th>用户名</th>
+                        <th>收货人</th>
+                        <th>电话</th>
+                        <th>地址</th>
+                        <th>总金额</th>
+                        <th>支付状态</th>
+                        <th>订单状态</th>
+                        <th>添加时间</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{range $key,$value := .order}}
+                    <tr>
+                        <td>{{$value.OrderId}}</td>
+                        <td>{{$value.Uid}}</td>
+                        <td>{{$value.Name}}</td>
+                        <td>{{$value.Phone}}</td>
+                        <td>{{$value.Address}}</td>
+                        <td>{{$value.AllPrice}}</td>
+                        <td>{{if eq $value.PayStatus 1}}已支付{{else}}未支付{{end}}</td>
+                        <td>
+                            {{if eq $value.OrderStatus 0}}已下单{{else if eq $value.OrderStatus 1}}已付款{{else if eq $value.OrderStatus 2}}已配货{{else if eq $value.OrderStatus 3}}发货中{{else if eq $value.OrderStatus 4}}交易成功{{else if eq $value.OrderStatus 5}}退货{{else}}取消{{end}}
+                        </td>
+                        <td>{{$value.AddTime }}</td>
+                        <td class="text-center">
+                            <a href="/admin/order/view?id={{$value.Id}}" />查看</a>
+                            <a href="/admin/order/doEdit?id={{$value.Id}}" />修改</a>
+                            <a class="delete" href="/admin/order/delete?id={{$value.Id}}" />删除</a>
+                        </td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+    $('#pagination').jqPaginator({
+        totalPages: {{.totalPages}},
+    visiblePages: 5,
+        currentPage: {{.page}},
+    onPageChange: function (num, type) {
+        console.log(num, type);
+        if(type != 'init'){
+            location.href="/admin/order?page="+num+"&keyword={{.keyword}}";
+        }
+    }
+    });
+</script>
+{{end}}
