@@ -48,10 +48,10 @@
                         <td>
                             {{if eq $value.OrderStatus 0}}已下单{{else if eq $value.OrderStatus 1}}已付款{{else if eq $value.OrderStatus 2}}已配货{{else if eq $value.OrderStatus 3}}发货中{{else if eq $value.OrderStatus 4}}交易成功{{else if eq $value.OrderStatus 5}}退货{{else}}取消{{end}}
                         </td>
-                        <td>{{$value.AddTime }}</td>
+                        <td>{{UnixToTime $value.AddTime }}</td>
                         <td class="text-center">
                             <a href="/admin/order/view?id={{$value.Id}}" />查看</a>
-                            <a href="/admin/order/doEdit?id={{$value.Id}}" />修改</a>
+                            <a href="/admin/order/edit?id={{$value.Id}}" />修改</a>
                             <a class="delete" href="/admin/order/delete?id={{$value.Id}}" />删除</a>
                         </td>
                     </tr>

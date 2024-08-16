@@ -1,0 +1,91 @@
+{{ define "admin/order/view.html" }}
+{{ template "admin/public/page_header.html" .}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>订单详情</h3>
+            </div>
+            <div class="panel-body">
+                <h4>订单信息</h4>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>订单号</th>
+                        <td>{{.order.OrderId}}</td>
+                    </tr>
+                    <tr>
+                        <th>用户名</th>
+                        <td>{{.order.Uid}}</td>
+                    </tr>
+                    <tr>
+                        <th>收货人</th>
+                        <td>{{.order.Name}}</td>
+                    </tr>
+                    <tr>
+                        <th>电话</th>
+                        <td>{{.order.Phone}}</td>
+                    </tr>
+                    <tr>
+                        <th>地址</th>
+                        <td>{{.order.Address}}</td>
+                    </tr>
+                    <tr>
+                        <th>总金额</th>
+                        <td>{{.order.AllPrice}}</td>
+                    </tr>
+                    <tr>
+                        <th>支付状态</th>
+                        <td>{{if eq .order.PayStatus 1}}已支付{{else}}未支付{{end}}</td>
+                    </tr>
+                    <tr>
+                        <th>订单状态</th>
+                        <td>
+                            {{if eq .order.OrderStatus 0}}已下单{{else if eq .order.OrderStatus 1}}已付款{{else if eq .order.OrderStatus 2}}已配货{{else if eq .order.OrderStatus 3}}发货中{{else if eq .order.OrderStatus 4}}交易成功{{else if eq .order.OrderStatus 5}}退货{{else}}取消{{end}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>添加时间</th>
+                        <td>{{UnixToTime .order.AddTime }}</td>
+                    </tr>
+                </table>
+
+                <h4>订单商品详情</h4>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>商品名称</th>
+                        <th>商品ID</th>
+                        <th>商品图片</th>
+                        <th>商品价格</th>
+                        <th>数量</th>
+                        <th>版本</th>
+                        <th>颜色</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{range $key,$item := .orderItems}}
+                    <tr>
+                        <td>{{$item.ProductTitle}}</td>
+                        <td>{{$item.ProductId}}</td>
+                        <td><img src="/{{$item.ProductImg}}" alt="/{{$item.ProductTitle}}" style="width: 100px;"/></td>
+                        <td>{{$item.ProductPrice}}</td>
+                        <td>{{$item.ProductNum}}</td>
+                        <td>{{$item.GoodsVersion}}</td>
+                        <td>{{$item.GoodsColor}}</td>
+                    </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <a href="/admin/order" class="btn btn-default">返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+{{end}}

@@ -1,0 +1,120 @@
+{{ define "admin/order/edit.html" }}
+{{ template "admin/public/page_header.html" .}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>修改订单</h3>
+            </div>
+            <div class="panel-body">
+                <form action="/admin/order/doEdit?id={{.order.Id}}" method="post">
+                    <!-- 订单信息部分 -->
+                    <div class="form-group">
+                        <label for="orderId">订单号</label>
+                        <input type="text" class="form-control" id="orderId" name="orderId" value="{{.order.OrderId}}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">收货人</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{.order.Name}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">电话</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="{{.order.Phone}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">地址</label>
+                        <input type="text" class="form-control" id="address" name="address" value="{{.order.Address}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="allPrice">总金额</label>
+                        <input type="text" class="form-control" id="allPrice" name="allPrice" value="{{.order.AllPrice}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="payStatus">支付状态</label>
+                        <select class="form-control" id="payStatus" name="payStatus">
+                            <option value="0" {{if eq .order.PayStatus 0}}selected{{end}}>未支付</option>
+                            <option value="1" {{if eq .order.PayStatus 1}}selected{{end}}>已支付</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orderStatus">订单状态</label>
+                        <select class="form-control" id="orderStatus" name="orderStatus">
+                            <option value="0" {{if eq .order.OrderStatus 0}}selected{{end}}>已下单</option>
+                            <option value="1" {{if eq .order.OrderStatus 1}}selected{{end}}>已付款</option>
+                            <option value="2" {{if eq .order.OrderStatus 2}}selected{{end}}>已配货</option>
+                            <option value="3" {{if eq .order.OrderStatus 3}}selected{{end}}>发货中</option>
+                            <option value="4" {{if eq .order.OrderStatus 4}}selected{{end}}>交易成功</option>
+                            <option value="5" {{if eq .order.OrderStatus 5}}selected{{end}}>退货</option>
+                            <option value="6" {{if eq .order.OrderStatus 6}}selected{{end}}>取消</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addTime">添加时间</label>
+                        <input type="text" class="form-control" id="addTime" name="addTime" value="{{UnixToTime .order.AddTime }}" readonly>
+                    </div>
+
+                    <!-- 订单商品信息部分 -->
+                    <h4>订单商品信息</h4>
+                    <div id="order-items">
+                        {{range $index, $item := .orderItem}}
+                        <div class="order-item">
+                            <h5>商品 {{Add $index 1 }}</h5>
+                            <div class="form-group">
+                                <label for="productTitle{{$index}}">商品名称</label>
+                                <input type="text" class="form-control" id="productTitle{{$index}}" name="orderItems[{{$index}}][productTitle]" value="{{$item.ProductTitle}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productId{{$index}}">商品ID</label>
+                                <input type="text" class="form-control" id="productId{{$index}}" name="orderItems[{{$index}}][productId]" value="{{$item.ProductId}}" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productImg{{$index}}">商品图片</label>
+                                <img src="/{{$item.ProductImg}}" alt="/{{$item.ProductTitle}}" style="width: 100px;"/>
+                                <input type="hidden" class="form-control" id="productImg{{$index}}" name="orderItems[{{$index}}][productImg]" value="{{$item.ProductImg}}" >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productPrice{{$index}}">商品价格</label>
+                                <input type="text" class="form-control" id="productPrice{{$index}}" name="orderItems[{{$index}}][productPrice]" value="{{$item.ProductPrice}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productNum{{$index}}">数量</label>
+                                <input type="text" class="form-control" id="productNum{{$index}}" name="orderItems[{{$index}}][productNum]" value="{{$item.ProductNum}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goodsVersion{{$index}}">版本</label>
+                                <input type="text" class="form-control" id="goodsVersion{{$index}}" name="orderItems[{{$index}}][goodsVersion]" value="{{$item.GoodsVersion}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goodsColor{{$index}}">颜色</label>
+                                <input type="text" class="form-control" id="goodsColor{{$index}}" name="orderItems[{{$index}}][goodsColor]" value="{{$item.GoodsColor}}">
+                            </div>
+                        </div>
+                        <hr>
+                        {{end}}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">提交修改</button>
+                    <a href="/admin/order" class="btn btn-default">取消</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+{{end}}

@@ -268,6 +268,10 @@ func Mul(price float64, num int) float64 {
 	return price * float64(num)
 }
 
+func Add(num1 int, num2 int) int {
+	return num1 + num2
+}
+
 func GetRandomNum() string {
 	var str string
 	for i := 0; i < 4; i++ {
