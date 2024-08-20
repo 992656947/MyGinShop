@@ -1,16 +1,16 @@
 package models
 
 type Nav struct {
-	Id         int
-	Title      string
-	Link       string
-	Position   int
-	IsOpennew  int
-	Relation   string
-	Sort       int
-	Status     int
-	AddTime    int
-	GoodsItems []Goods `gorm:"-"`
+	Id         int     `json:"id"`
+	Title      string  `json:"title"`
+	Link       string  `json:"link"`
+	Position   int     `json:"position"`
+	IsOpennew  int     `json:"is_opennew"`
+	Relation   string  `json:"relation"`
+	Sort       int     `json:"sort"`
+	Status     int     `json:"status"`
+	AddTime    int     `json:"add_time"`
+	GoodsItems []Goods `gorm:"-" json:"goods_items" `
 }
 
 func (Nav) TableName() string {

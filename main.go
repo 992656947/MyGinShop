@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"html/template"
 	"xiaomiginshop/models"
 	"xiaomiginshop/routers"
@@ -13,6 +14,10 @@ import (
 func main() {
 	// 创建一个默认的路由引擎
 	r := gin.Default()
+
+	//gin跨域
+	r.Use(cors.Default())
+
 	//自定义模板函数  注意要把这个函数放在加载模板前
 	r.SetFuncMap(template.FuncMap{
 		"UnixToTime": models.UnixToTime,

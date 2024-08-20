@@ -63,5 +63,14 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/user/order", middlewares.InitUserAuthMiddleware, shop.UserController{}.OrderList)
 		defaultRouters.GET("/user/orderinfo", middlewares.InitUserAuthMiddleware, shop.UserController{}.OrderInfo)
 
+		defaultRouters.GET("/search", shop.SearchController{}.Index)
+		defaultRouters.GET("/search/addGoods", shop.SearchController{}.AddGoods)
+		defaultRouters.GET("/search/updateGoods", shop.SearchController{}.UpdateGoods)
+		defaultRouters.GET("/search/deleteGoods", shop.SearchController{}.DeleteGoods)
+		defaultRouters.GET("/search/getOne", shop.SearchController{}.GetOne)
+		defaultRouters.GET("/search/query", shop.SearchController{}.Query)
+		defaultRouters.GET("/search/filerQuery", shop.SearchController{}.FilterQuery)
+		defaultRouters.GET("/search/pagingQuery ", shop.SearchController{}.PagingQuery)
+
 	}
 }
